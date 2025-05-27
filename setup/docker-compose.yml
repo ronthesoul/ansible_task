@@ -17,6 +17,8 @@ services:
       SSH_USERNAME: docker
       SSH_USERPASS: docker
     command: ["/usr/sbin/sshd", "-D"]
+    ports:
+      - "8000:8000"
     networks:
       - netgrov
 
