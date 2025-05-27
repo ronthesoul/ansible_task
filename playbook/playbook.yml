@@ -48,11 +48,12 @@
         extra_args: --break-system-packages
 
     - name: Install Python dependencies from Pipfile (safe workaround)
-      shell: |
-        sudo -H -u {{ app_user }} bash -c 'cd "{{ app_dir }}" && pipenv install --deploy --ignore-pipfile'
+      shell: pipenv install
+      args:
+        chdir: "{{ app_dir }}/app"
 
-    - name: Run app.py in background as a simulation
+    - name: Run app.py in background using setsid
       shell: |
-        sudo -u {{ app_user }}  nohup pipenv run python src/my_app/app.py > /home/my_app/app.log 2>&1 &
+        setsid pipenv run python3 src/my_app/app.py > /home/my_app/app.log 2>&1 < /dev/null &
       args:
         chdir: "{{ app_dir }}/app"
