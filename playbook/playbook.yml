@@ -8,10 +8,6 @@
     service_name: my_app
 
   tasks:
-    - name: update apt cache
-      apt:
-        update_cache: yes
-
     - name: Ensure Git is installed
       apt:
         name:
