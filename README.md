@@ -19,18 +19,19 @@ This repository contains an automated Ansible setup to configure and deploy a si
 ## 📂 Project Tree
 
 ```
-ansible_task/
-├── docker/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── start.sh
-├── playbook/
-│   └── playbook.yml
-├── site/
-│   └── app.py
-├── ansible.cfg
-├── docker-compose.yml
-└── README.md
+├── CONTRIBUTORS.md
+├── README.md
+├── playbook
+│   ├── ansible.cfg
+│   ├── hosts.ini
+│   └── playbook.yml
+└── setup
+    ├── Dockerfile.ansible
+    ├── Dockerfile.deb
+    ├── docker-compose.yml
+    ├── id_rsa
+    ├── id_rsa.pub
+    └── node.sh
 ```
 
 ---
