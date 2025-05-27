@@ -28,6 +28,9 @@
         shell: /bin/bash
         create_home: yes
 
+    - name: Mark app directory as safe for Git
+      command: git config --global --add safe.directory {{ app_dir }}/app
+
     - name: Clone code from repo
       git:
         repo: 'https://github.com/ronthesoul/my_app'
@@ -46,26 +49,15 @@
       pip:
         name: pipenv
         executable: pip3
+        extra_args: --break-system-packages
 
-    - name: Install Python dependencies from Pipfile
-      command: pipenv install
+    - name: Install Python dependencies from Pipfile (safe workaround)
+      shell: "sudo -u {{ app_user }} pipenv install"
       args:
         chdir: "{{ app_dir }}"
-      become_user: "{{ app_user }}"
 
-    - name: Copy systemd service file into place
-      copy:
-        src: "{{ app_dir }}/my_app.service"
-        dest: /etc/systemd/system/my_app.service
-        remote_src: yes
-        mode: '0644'
-
-    - name: Reload systemd
-      systemd:
-        daemon_reload: yes
-
-    - name: Enable and start the app service
-      systemd:
-        name: "{{ service_name }}"
-        enabled: yes
-        state: started
+    - name: Run app.py in background as a simulation
+      shell: |
+        sudo -u {{ app_user }}  nohup pipenv run python src/my_app/app.py > /home/my_app/app.log 2>&1 &
+      args:
+        chdir: "{{ app_dir }}/app"
