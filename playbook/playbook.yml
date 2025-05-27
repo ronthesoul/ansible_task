@@ -1,0 +1,71 @@
+- name: Deploy my_app service
+  hosts: app
+  become: true
+
+  vars:
+    app_user: my_app
+    app_dir: /home/my_app
+    service_name: my_app
+
+  tasks:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Ensure Git is installed
+      apt:
+        name:
+          - git
+          - python3-pip
+          - python3-setuptools
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Create application user
+      user:
+        name: "{{ app_user }}"
+        home: "{{ app_dir }}"
+        shell: /bin/bash
+        create_home: yes
+
+    - name: Clone code from repo
+      git:
+        repo: 'https://github.com/ronthesoul/my_app'
+        dest: "{{ app_dir }}/app"
+        version: main
+        force: yes
+
+    - name: Set ownership of app files
+      file:
+        path: "{{ app_dir }}"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        recurse: yes
+
+    - name: Ensure that pipenv is installed
+      pip:
+        name: pipenv
+        executable: pip3
+
+    - name: Install Python dependencies from Pipfile
+      command: pipenv install
+      args:
+        chdir: "{{ app_dir }}"
+      become_user: "{{ app_user }}"
+
+    - name: Copy systemd service file into place
+      copy:
+        src: "{{ app_dir }}/my_app.service"
+        dest: /etc/systemd/system/my_app.service
+        remote_src: yes
+        mode: '0644'
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable and start the app service
+      systemd:
+        name: "{{ service_name }}"
+        enabled: yes
+        state: started
