@@ -69,7 +69,8 @@ docker exec -it ansible_task_container bash
 ### 4. Run the Ansible Playbook
 
 ```bash
-ansible-playbook playbook/playbook.yml
+cd ansible_task/playbook
+ansible-playbook playbook.yml
 ```
 
 ---
