@@ -86,7 +86,7 @@ Visit: [http://localhost:8000](http://localhost:8000)
 
 - Ensure Docker is installed and running before starting.
 - You can customize variables in `playbook.yml` to suit your environment.
-- Make sure to allow ports 5000 if using a VM or remote server.
+- Make sure to allow ports 8000 if using a VM or remote server.
 
 ---
 
