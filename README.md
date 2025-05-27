@@ -49,7 +49,7 @@ ansible_task/
 
 ```bash
 git clone https://github.com/ronthesoul/ansible_task.git
-cd ansible_task
+cd ansible_task/setup
 ```
 
 ### 2. Build and Start the Container
