@@ -52,8 +52,8 @@
         extra_args: --break-system-packages
 
     - name: Install Python dependencies from Pipfile (safe workaround)
-  shell: |
-    sudo -H -u {{ app_user }} bash -c 'cd "{{ app_dir }}" && pipenv install --deploy --ignore-pipfile'
+      shell: |
+        sudo -H -u {{ app_user }} bash -c 'cd "{{ app_dir }}" && pipenv install --deploy --ignore-pipfile'
 
     - name: Run app.py in background as a simulation
       shell: |
